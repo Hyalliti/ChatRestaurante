@@ -34,6 +34,20 @@ func PrintList(list []string, option int){
 	}
 }
 
+// A function that prints []float64
+func PrintF64( list []float64, option int ) {
+	if option == 1 {
+		for _,val := range  list {
+			fmt.Println(val)
+		}
+	}	else  {
+		for _,val := range  list {
+			fmt.Print(val)
+			fmt.Print(",")
+		}
+	}
+}
+
 // A function that prints numbers 
 // Receives a number and uses strconv to turn it into a print statement of said number
 func PrintNumber(number int){

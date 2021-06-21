@@ -12,11 +12,15 @@ import (
 // The probability field is the corresponding probability for each element in its class.
 // Returns a float64 with a probability value for a word in a sentence of Length Vocabulary
 // nk (NK[Class]) , contains a single float64 value from the []float64 representing
-//the ocurrence of the word in a  in the Analyzed Sentence for a given class
-// N Contains the corpus occurrence of the words in the Analyzed Sentence
+// 		the ocurrence of the word in a  in the Analyzed Sentence for a given class
+// N Contains the occurrences of the words for a given class in the corpus
+// Vocabulary contains length in words of a sentence
 func HELPER_GenerateProbabilityField(nk float64, n float64,Vocabulary float64 ) float64 {
-	numerator := nk+1.0
-	denominator := n+Vocabulary
+	numerator := nk+1
+	denominator := n + Vocabulary
+	if denominator == 0 {
+		return 0.0
+	}
 	return numerator/denominator
 }
 
@@ -82,6 +86,16 @@ func HELPER_Sum64(list []float64) float64 {
 	return res
 }
 
+// Helper function that returns the last element of a string which will be split
+// Returns a string which holds the last element. 
+func HELPER_LastElement(query string) string {
+	if query == "" {
+		return ""
+	}
+	query_LastElementSlice := strings.SplitAfterN(strings.TrimSpace(query)," ",len(query))
+	lastElement := len(query_LastElementSlice)-1
+	return strings.TrimSpace(query_LastElementSlice[lastElement])
+}
 // Helper function that cleanses a corpus of text and returns 
 // a filtered and cleaned string
 // Cleanse the corpus (removes labels & symbols)
@@ -135,8 +149,6 @@ func HELPER_GetPrediction(result map[string]float64) string {
 		}  
 	}
 
-	PrintText("Class prediction of Known Words",1)
-	PrintText(buffer_Prediction,1)
 	return buffer_Prediction
 }
 

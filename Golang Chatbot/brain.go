@@ -1,18 +1,39 @@
-// brain is the Chatbot's Brain, just a crop out of the main.go
+// Brain is the Chatbot's Brain, just a crop out of the main.go
+// Easier to manage and with all the parameters required to train the network.
 package main 
-import "gonum.org/v1/gonum/mat"
 
 
-func BrainTrain(Dataframe Dataset, input string, label string, ShouldRetrain bool) Dataset{
+func BrainTrain(Dataframe Dataset, input string, label string, ShouldTrain bool, Training bool) Dataset{
 	Dataframe = HELPER_AssignQuery(Dataframe, input)
 	Dataframe = CalculateBayes(Dataframe)
-	Dataframe = NeuralNetwork(Dataframe, 10, label, ShouldRetrain) 
-	// Opcionales
-	if(Dataframe.DATA2_NeuralPrediction == label){
-		PrintText("Good Prediction",1)
+
+	for {
+		if label == "" {
+			BP := Dataframe.DATA2_BayesPrediction
+			Dataframe = NeuralNetwork(Dataframe, BP, ShouldTrain, Training) 
 		} else {
-		PrintText("Bad Prediction",1)
-		Dataframe.DATA2_StoredWeights = mat.NewVecDense(Dataframe.DATA2_StoredWeights.Len(),HELPER_GenerateOnesF64(Dataframe.DATA2_StoredWeights.Len()))
+			Dataframe = NeuralNetwork(Dataframe, label, ShouldTrain, Training) 
+		}
+		if (label == Dataframe.DATA2_NeuralPrediction) {
+			break
+		}
+		Dataframe.DATA3_Iterations++
 	}
+
+	PrintNumber(Dataframe.DATA3_Iterations)
 	return Dataframe	
 }	
+
+func ExecuteTrainedNetwork(Dataframe Dataset, msg string) string{
+	Dataframe = HELPER_AssignQuery(Dataframe, msg)
+	Dataframe = CalculateBayes(Dataframe)
+
+	if Dataframe.DATA2_CummulativeProbabilities != 0 {
+		Result := TrainedNetworkExecution(Dataframe)
+		return Result
+	}
+	Result := Dataframe.DATA2_BayesPrediction
+	return Result
+}
+
+

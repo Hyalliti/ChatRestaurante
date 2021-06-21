@@ -1,6 +1,5 @@
 // fm Stands for :
-// File Manager, Create and Write/Close Files, this module will create a 
-// text file with only the Data || Labels
+// File Manager, Create and Write/Close Files, this module will create a text file with only the Data || Labels
 // According to the needs. 
 
 package main
