@@ -7,6 +7,7 @@ func BrainTrain(Dataframe Dataset, input string, label string, ShouldTrain bool,
 	Dataframe = HELPER_AssignQuery(Dataframe, input)
 	Dataframe = CalculateBayes(Dataframe)
 
+	var loopFinder int = 0 // Loop control variable
 	for {
 		if label == "" {
 			BP := Dataframe.DATA2_BayesPrediction
@@ -14,10 +15,11 @@ func BrainTrain(Dataframe Dataset, input string, label string, ShouldTrain bool,
 		} else {
 			Dataframe = NeuralNetwork(Dataframe, label, ShouldTrain, Training) 
 		}
-		if (label == Dataframe.DATA2_NeuralPrediction) {
+		if (label == Dataframe.DATA2_NeuralPrediction) || (loopFinder == 10) {
 			break
 		}
 		Dataframe.DATA3_Iterations++
+		loopFinder++
 	}
 
 	PrintNumber(Dataframe.DATA3_Iterations)
