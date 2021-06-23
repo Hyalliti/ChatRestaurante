@@ -1,2 +1,0 @@
-# ChatRestaurante
-Golang NN Chat
